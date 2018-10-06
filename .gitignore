@@ -1,23 +1,41 @@
-# Compiled class file
-*.class
-
-# Log file
+/.gradle/
+/build/
+/target/
+/out/
+/classes/
+/.idea/
+/bin/
+/logs/
+/ddl/*.ldb
+/ddl/.gradle
 *.log
-
-# BlueJ files
-*.ctxt
-
-# Mobile Tools for Java (J2ME)
-.mtj.tmp/
-
-# Package Files #
-*.jar
-*.war
-*.nar
-*.ear
-*.zip
-*.tar.gz
-*.rar
-
-# virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml
-hs_err_pid*
+*.log.*
+*.bat
+*.iml
+/domain/*.iml
+/domain/logs
+/domain/target
+/domain/out
+/domain/.gradle
+/cache/cache-ehcache/*.iml
+/cache/cache-ehcache/logs
+/cache/cache-ehcache/out
+/cache/cache-ehcache/target
+/cache/cache-ehcache/.gradle
+/cache/cache-redis/*.iml
+/cache/cache-redis/logs
+/cache/cache-redis/out
+/cache/cache-redis/target
+/cache/cache-redis/.gradle
+/server/*.iml
+/server/logs
+/server/out
+/server/target
+/server/.gradle
+/ui/*.iml
+/ui/target/
+/ui/logs/
+/ui/dist/
+/ui/node_modules/
+/ui/package-lock.json
+/ui/gradle

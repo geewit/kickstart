@@ -1,0 +1,17 @@
+rootProject.name = "kickstart"
+
+include "domain"
+
+include ":cache"
+project(':cache').projectDir = new File(settingsDir, 'cache')
+
+
+include ':cache:cache-core'
+project(':cache:cache-core').projectDir = new File(project(':cache').projectDir, 'cache-core')
+include ':cache:cache-ehcache'
+project(':cache:cache-ehcache').projectDir = new File(project(':cache').projectDir, 'cache-ehcache')
+include ':cache:cache-redis'
+project(':cache:cache-redis').projectDir = new File(project(':cache').projectDir, 'cache-redis')
+
+include "server"
+include "ui"

@@ -1,0 +1,7 @@
+project(':cache:cache-core') {
+    dependencies {
+        compile(project(":domain"))
+        runtime("mysql:mysql-connector-java:$mysql_version")
+    }
+
+}

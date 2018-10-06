@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<configuration status="OFF">
+    <Properties>
+        <Property name="LOG_HOME">${sys:user.home}/deploy/logs</Property>
+        <Property name="LOG_PATTERN">%d{yyyy-MM-dd HH:mm:ss.SSS} [%-5level] %class %M-%L - %m%n</Property>
+    </Properties>
+    <appenders>
+        <RollingFile name="rollingDebugFile" fileName="${LOG_HOME}/debug.log" filePattern="${LOG_HOME}/debug.%d{yyyy-MM-dd}.%i.gz">
+            <PatternLayout pattern="${LOG_PATTERN}" />
+            <Policies>
+                <TimeBasedTriggeringPolicy interval="1" modulate="true" />
+                <SizeBasedTriggeringPolicy size="100 MB"/>
+            </Policies>
+            <Filters>
+                <!-- 只记录info级别信息 -->
+                <ThresholdFilter level="debug" onMatch="ACCEPT" onMismatch="DENY" />
+            </Filters>
+            <!-- 指定每天的最大压缩包个数，默认7个，超过了会覆盖之前的-->
+            <DefaultRolloverStrategy max="1"/>
+        </RollingFile>
+        <RollingFile name="rollingInfoFile" fileName="${LOG_HOME}/info.log" filePattern="${LOG_HOME}/info.%d{yyyy-MM-dd}.%i.gz">
+            <PatternLayout pattern="${LOG_PATTERN}" />
+            <Policies>
+                <TimeBasedTriggeringPolicy interval="1" modulate="true" />
+                <SizeBasedTriggeringPolicy size="100 MB"/>
+            </Policies>
+            <Filters>
+                <!-- 只记录info级别信息 -->
+                <ThresholdFilter level="info" onMatch="ACCEPT" onMismatch="DENY" />
+            </Filters>
+            <!-- 指定每天的最大压缩包个数，默认7个，超过了会覆盖之前的-->
+            <DefaultRolloverStrategy max="1"/>
+        </RollingFile>
+        <RollingFile name="rollingWarnFile" fileName="${LOG_HOME}/warn.log" filePattern="${LOG_HOME}/warn.%d{yyyy-MM-dd}.%i.gz">
+            <PatternLayout pattern="${LOG_PATTERN}" />
+            <Policies>
+                <TimeBasedTriggeringPolicy interval="1" modulate="true" />
+                <SizeBasedTriggeringPolicy size="100 MB"/>
+            </Policies>
+            <Filters>
+                <!-- 只记录info级别信息 -->
+                <ThresholdFilter level="warn" onMatch="ACCEPT" onMismatch="DENY" />
+            </Filters>
+            <!-- 指定每天的最大压缩包个数，默认7个，超过了会覆盖之前的-->
+            <DefaultRolloverStrategy max="7"/>
+        </RollingFile>
+        <RollingFile name="rollingErrorFile" fileName="${LOG_HOME}/error.log" filePattern="${LOG_HOME}/error.%d{yyyy-MM-dd}.%i.gz">
+            <PatternLayout pattern="${LOG_PATTERN}" />
+            <Policies>
+                <TimeBasedTriggeringPolicy interval="1" modulate="true" />
+                <SizeBasedTriggeringPolicy size="100 MB"/>
+            </Policies>
+            <Filters>
+                <!-- 只记录info级别信息 -->
+                <ThresholdFilter level="error" onMatch="ACCEPT" onMismatch="DENY" />
+            </Filters>
+            <!-- 指定每天的最大压缩包个数，默认7个，超过了会覆盖之前的-->
+            <DefaultRolloverStrategy max="7"/>
+        </RollingFile>
+    </appenders>
+    <loggers>
+        <Logger name="io.geewit" level="debug" additivity="true">
+            <appender-ref ref="rollingDebugFile" />
+        </Logger>
+        <Logger name="antlr" level="warn" additivity="true"/>
+        <Logger name="com.alibaba" level="warn" additivity="true"/>
+        <Logger name="com.alibaba.druid" level="warn" additivity="true"/>
+        <Logger name="com.alibaba.druid.filter.logging.Slf4jLogFilter" level="debug" additivity="true">
+            <appender-ref ref="rollingDebugFile" />
+        </Logger>
+        <Logger name="com.mysql" level="warn" additivity="true"/>
+        <Logger name="javax" level="warn" additivity="true"/>
+        <Logger name="java.sql" level="warn" additivity="true"/>
+        <Logger name="net.sf" level="warn" additivity="true"/>
+        <Logger name="com.fasterxml" level="warn" additivity="true"/>
+        <Logger name="com.google" level="warn" additivity="true"/>
+        <Logger name="org.antlr" level="warn" additivity="true"/>
+        <Logger name="org.apache" level="warn" additivity="true"/>
+        <Logger name="org.aspectj" level="warn" additivity="true"/>
+        <Logger name="org.dom4j" level="warn" additivity="true"/>
+        <Logger name="org.eclipse" level="warn" additivity="true"/>
+        <Logger name="org.hibernate" level="warn" additivity="true"/>
+        <Logger name="org.javassist" level="warn" additivity="true"/>
+        <Logger name="org.jboss" level="warn" additivity="true"/>
+        <Logger name="org.ow2" level="warn" additivity="true"/>
+        <Logger name="org.slf4j" level="warn" additivity="true"/>
+        <Logger name="org.springframework" level="warn" additivity="true"/>
+        <Logger name="org.springframework.web" level="info" additivity="true"/>
+        <Logger name="springfox" level="warn" additivity="false"/>
+        <root level="info">
+            <appender-ref ref="rollingInfoFile" />
+            <appender-ref ref="rollingWarnFile" />
+            <appender-ref ref="rollingErrorFile" />
+        </root>
+    </loggers>
+</configuration>

@@ -1,0 +1,6 @@
+rootProject.name = 'cache'
+
+include 'cache-core'
+include 'cache-ehcache'
+include 'cache-redis'
+

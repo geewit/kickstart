@@ -1,0 +1,9 @@
+project(':cache:cache-redis') {
+    dependencies {
+        compile(project(":cache:cache-core"))
+        compile("org.springframework.boot:spring-boot-starter-data-redis:$spring_boot_version")
+        compile("org.springframework.session:spring-session-core:$spring_session_version")
+        compile("org.springframework.session:spring-session-data-redis:$spring_session_version")
+    }
+
+}

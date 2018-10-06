@@ -1,0 +1,323 @@
+import java.nio.charset.StandardCharsets
+
+buildscript {
+    repositories {
+        mavenLocal()
+        maven { url "https://maven.aliyun.com/repository/gradle-plugin" }
+        maven { url "http://repo1.maven.org/maven2" }
+    }
+    dependencies {
+        classpath("org.springframework.boot:spring-boot-gradle-plugin:$spring_boot_version")
+    }
+}
+
+allprojects {
+    group = "io.geewit"
+    buildDir = 'target'
+    apply plugin: "idea"
+    idea {
+        module {
+            excludeDirs += file( ".gradle" )
+            excludeDirs += file( ".idea" )
+            excludeDirs += buildDir
+            downloadJavadoc = false
+            downloadSources = true
+        }
+    }
+}
+
+
+
+subprojects {
+    println "subproject.name = ${it.name}"
+
+    ext {
+        profile = "development"
+        if (rootProject.hasProperty("profile")) {
+            profile = rootProject.findProperty("profile")
+        }
+        println "profile = ${profile}"
+    }
+
+    if(it.name != 'ui') {
+        apply plugin: 'java'
+
+        repositories {
+            mavenLocal()
+//            mavenCentral()
+            maven { url "https://maven.aliyun.com/repository/central" }
+            maven { url "http://repo1.maven.org/maven2" }
+        }
+
+        configurations {
+            all { config ->
+                config.exclude group: "org.apache.geronimo.specs"
+                config.exclude group: "org.jboss.spec.javax.annotation"
+                config.exclude group: "org.jboss.spec.javax.servlet"
+                config.exclude group: "org.jboss.spec.javax.transaction"
+                config.exclude group: "org.jboss.spec.javax.websocket"
+                config.exclude group: "org.springframework.boot", module:"spring-boot-starter-logging"
+                config.exclude group: "org.springframework.boot", module:"spring-boot-starter-tomcat"
+                config.exclude group: "org.apache.tomcat", module:"tomcat-jdbc"
+                config.exclude group: "org.apache.tomcat.embed"
+                config.exclude group: "org.glassfish.hk2", module:"osgi-resource-locator"
+                config.exclude group: "com.vaadin.external.google"
+                config.exclude group: "com.zaxxer"
+                config.exclude group: "org.codehaus.jackson"
+                config.exclude group: "org.codehaus.jettison"
+                if (profile != 'development') {
+                    config.exclude group: "org.springframework.boot", module:"spring-boot-devtools"
+                }
+                resolutionStrategy.eachDependency { details ->
+
+                    if (details.requested.group == 'javax.activation' || details.requested.group == 'com.sun.activation') {
+                        if(details.requested.name == 'activation') {
+                            details.useTarget(group: details.requested.group, name: 'javax.activation-api', version: javax_activation_api_version)
+                        } else {
+                            details.useVersion javax_activation_version
+                        }
+                    } else if (details.requested.group == 'javax.annotation') {
+                        details.useVersion javax_annotation_api_version
+                    } else if (details.requested.group == 'javax.servlet') {
+                        details.useVersion javax_servlet_api_version
+                    } else if (details.requested.group == 'javax.transaction') {
+                        if(details.requested.name == 'jta') {
+                            details.useTarget(group: details.requested.group, name: 'javax.transaction-api', version: javax_transaction_api_version)
+                        } else {
+                            details.useVersion javax_transaction_api_version
+                        }
+                    } else if (details.requested.group == 'javax.validation') {
+                        details.useVersion javax_validation_api_version
+                    } else if (details.requested.group == 'javax.websocket') {
+                        details.useVersion javax_websocket_api_version
+                    } else if (details.requested.group == 'com.aliyun') {
+                        if(details.requested.name == 'aliyun-java-sdk-core') {
+                            details.useVersion aliyun_java_sdk_core_version
+                        }
+                    } else if (details.requested.group == 'com.aliyun') {
+                        if(details.requested.name == 'aliyun-java-sdk-core') {
+                            details.useVersion aliyun_java_sdk_core_version
+                        }
+                    } else if (details.requested.group == 'org.codehaus.mojo' && details.requested.name == 'animal-sniffer-annotations') {
+                        details.useVersion animal_sniffer_annotations_version
+                    } else if (details.requested.group == 'org.antlr' && details.requested.name.startsWith('antlr4')) {
+                        details.useVersion antlr4_version
+                    } else if (details.requested.group == 'org.ow2.asm' && details.requested.name == 'asm') {
+                        details.useVersion asm_version
+                    } else if (details.requested.group == 'org.aspectj') {
+                        details.useVersion aspectj_version
+                    } else if (details.requested.group == 'org.bouncycastle') {
+                        details.useVersion bouncycastle_version
+                    } else if (details.requested.group == 'net.bytebuddy') {
+                        details.useVersion bytebuddy_version
+                    } else if (details.requested.group == 'org.checkerframework') {
+                        details.useVersion checker_version
+                    } else if (details.requested.group == 'com.fasterxml' && details.requested.name == 'classmate') {
+                        details.useVersion classmate_version
+                    } else if (details.requested.group == 'commons-codec' && details.requested.name == 'commons-codec') {
+                        details.useVersion commons_codec_version
+                    } else if (details.requested.group == 'commons-collections' && details.requested.name == 'commons-collections') {
+                        details.useVersion commons_collections_version
+                    } else if (details.requested.group == 'commons-lang' && details.requested.name == 'commons-lang') {
+                        details.useVersion commons_lang_version
+                    } else if (details.requested.group == 'org.apache.commons') {
+                        if(details.requested.name == 'commons-collections4') {
+                            details.useVersion commons_collections4_version
+                        } else if(details.requested.name == 'commons-compress') {
+                            details.useVersion commons_compress_version
+                        } else if(details.requested.name == 'commons-configuration2') {
+                            details.useVersion commons_configuration2_version
+                        } else if(details.requested.name == 'commons-lang3') {
+                            details.useVersion commons_lang3_version
+                        } else if (details.requested.name == 'commons-pool2') {
+                            details.useVersion commons_pool2_version
+                        }
+                    } else if (details.requested.group == 'com.github.virtuald' && details.requested.name == 'curvesapi') {
+                        details.useVersion curvesapi_version
+                    } else if (details.requested.group == 'com.alibaba') {
+                        if(details.requested.name == 'fastjson') {
+                            details.useVersion fastjson_version
+                        } else if(details.requested.name.startsWith('druid')) {
+                            details.useVersion druid_version
+                        }
+                    } else if (details.requested.group == 'net.sf.ehcache') {
+                        details.useVersion ehcache_version
+                    } else if (details.requested.group == 'com.google.errorprone') {
+                        details.useVersion errorprone_version
+                    } else if (details.requested.group == 'com.google.code.findbugs') {
+                        details.useVersion findbugs_version
+                    } else if (details.requested.group == 'com.google.code.gson') {
+                        details.useVersion gson_version
+                    } else if (details.requested.group == 'com.google.guava') {
+                        details.useVersion guava_version
+                    } else if (details.requested.group == 'org.hibernate') {
+                        details.useVersion hibernate_version
+                    } else if (details.requested.group == 'org.hibernate.validator') {
+                        details.useVersion hibernate_validator_version
+                    } else if (details.requested.group.startsWith('org.glassfish.hk2')) {
+                        details.useVersion hk2_version
+                    } else if (details.requested.group == 'org.apache.httpcomponents') {
+                        if(details.requested.name == 'httpclient') {
+                            details.useVersion httpclient_version
+                        } else if (details.requested.name == 'httpcore' || details.requested.name == 'httpcore-nio') {
+                            details.useVersion httpcore_version
+                        }
+                    } else if (details.requested.group == 'com.ibm.icu') {
+                        details.useVersion icu_version
+                    } else if (details.requested.group.startsWith('com.fasterxml.jackson')) {
+                        details.useVersion jackson_version
+                    } else if (details.requested.group == 'org.javassist') {
+                        details.useVersion javassist_version
+                    } else if (details.requested.group == 'javax.json' && details.requested.name == 'javax.json-api') {
+                        details.useVersion javax_json_version
+                    } else if (details.requested.group == 'org.glassfish' && details.requested.name == 'javax.json') {
+                        details.useVersion javax_json_version
+                    } else if (details.requested.group == 'javax.mail' || details.requested.group == 'com.sun.mail') {
+                        details.useVersion javax_mail_version
+                    } else if(details.requested.group == 'javax.ws.rs' && details.requested.name == 'javax.ws.rs-api') {
+                        details.useVersion javax_ws_rs_api_version
+                    } else if(details.requested.group == 'javax.xml.bind') {
+                        details.useVersion jaxb_api_version
+                    } else if (details.requested.group == 'com.sun.xml.bind') {
+                        details.useVersion jaxb_impl_version
+                    } else if (details.requested.group == 'org.jboss' && details.requested.name == 'jandex') {
+                        details.useVersion jboss_jandex_version
+                    } else if (details.requested.group == 'org.jboss.logging') {
+                        details.useVersion jboss_logging_version
+                    } else if (details.requested.group == 'org.jboss.threads') {
+                        details.useVersion jboss_threads_version
+                    } else if (details.requested.group == 'org.jboss.xnio') {
+                        details.useVersion jboss_xnio_version
+                    } else if (details.requested.group == 'org.jdom' && details.requested.name == 'jdom2') {
+                        details.useVersion jdom2_version
+                    } else if (details.requested.group.startsWith('org.glassfish.jersey')) {
+                        if(details.requested.name == 'jersey-spring3') {
+                            details.useTarget(group: details.requested.group, name: 'jersey-spring4', version: jersey_version)
+                        } else {
+                            details.useVersion jersey_version
+                        }
+                    } else if (details.requested.group == 'net.minidev' && details.requested.name == 'json-smart') {
+                        details.useVersion json_smart_version
+                    } else if (details.requested.group == 'com.google.j2objc') {
+                        details.useVersion j2objc_version
+                    } else if(details.requested.group == 'io.lettuce') {
+                        details.useVersion lettuce_version
+                    } else if (details.requested.group == 'org.apache.logging.log4j') {
+                        details.useVersion log4j2_version
+                    } else if (details.requested.group == 'org.mapstruct') {
+                        details.useVersion mapstruct_version
+                    } else if (details.requested.group == 'mysql' && details.requested.name == "mysql-connector-java") {
+                        details.useVersion mysql_version
+                    } else if (details.requested.group == 'com.squareup.okhttp3') {
+                        details.useVersion okhttp_version
+                    } else if (details.requested.group == 'com.squareup.okio') {
+                        details.useVersion okio_version
+                    } else if (details.requested.group == 'io.projectreactor' && details.requested.name == 'reactor-core') {
+                        details.useVersion reactor_version
+                    } else if (details.requested.group == 'org.slf4j') {
+                        details.useVersion slf4j_version
+                    } else if (details.requested.group == "org.yaml" && details.requested.name == "snakeyaml") {
+                        details.useVersion snakeyaml_version
+                    } else if (details.requested.group == 'org.springframework') {
+                        details.useVersion spring_version
+                    } else if (details.requested.group == 'org.springframework.boot') {
+                        details.useVersion spring_boot_version
+                    } else if (details.requested.group == 'org.springframework.data') {
+                        details.useVersion spring_data_version
+                    } else if(details.requested.group == 'org.springframework.security') {
+                        details.useVersion spring_security_version
+                    } else if (details.requested.group == 'org.springframework.session') {
+                        details.useVersion spring_session_version
+                    } else if (details.requested.group == "io.swagger") {
+                        details.useVersion swagger_version
+                    } else if (details.requested.group == 'io.geewit.boot') {
+                        if(details.requested.name == 'gw-boot-starter-jpa') {
+                            details.useVersion gw_boot_starter_jpa_version
+                        }
+                    } else if (details.requested.group == 'io.geewit.core') {
+                        if (details.requested.name == 'gw-core-jackson') {
+                            details.useVersion gw_core_jackson_version
+                        } else if (details.requested.name == 'gw-core-okhttp') {
+                            details.useVersion gw_core_okhttp_version
+                        } else if(details.requested.name == 'gw-core-utils') {
+                            details.useVersion gw_core_utils_version
+                        }
+                    } else if (details.requested.group == 'io.geewit.data') {
+                        if(details.requested.name == 'gw-data-jpa-essential') {
+                            details.useVersion gw_data_jpa_essential_version
+                        }
+                    } else if (details.requested.group == 'mysql' && details.requested.name == 'mysql-connector-java') {
+                        details.useVersion mysql_version
+                    } else if (details.requested.group == 'org.json' && details.requested.name == 'json') {
+                        details.useVersion json_version
+                    } else if (details.requested.group == 'io.netty') {
+                        details.useVersion netty_version
+                    } else if (details.requested.group == 'io.undertow') {
+                        details.useVersion undertow_version
+                    } else if (details.requested.group == 'org.unbescape') {
+                        details.useVersion unbescape_version
+                    } else if (details.requested.group == 'org.wildfly.common') {
+                        details.useVersion wildfly_common_version
+                    } else if (details.requested.group == 'org.wildfly.client') {
+                        details.useVersion wildfly_client_version
+                    }
+                }
+            }
+        }
+
+        sourceSets {
+            main {
+                java {
+                    srcDirs = ['src/main/java']
+                }
+                resources {
+                    srcDirs = ['src/main/resources']
+                }
+            }
+        }
+
+        compileJava {
+            sourceCompatibility = JavaVersion.VERSION_1_8
+            targetCompatibility = JavaVersion.VERSION_1_8
+            if (profile == 'development') {
+                exclude('io/geewit/**/ehcache/**/*.java')
+                exclude('io/geewit/**/session/**/*.java')
+                exclude('**/*Redis*.java')
+                exclude('**/*Session*.java')
+            } else {
+                println "skip profile ehcache/session java source......"
+
+            }
+        }
+
+        compileJava.options*.compilerArgs << "-Xlint:unchecked" << "-Xlint:options"
+
+        [compileJava, javadoc]*.options*.encoding = StandardCharsets.UTF_8.name()
+
+        if(it.name == 'server') {
+            apply plugin: 'org.springframework.boot'
+
+//            rootProject.getProperties().put("profile", ext.profile)
+
+            bootRun.systemProperty 'spring.profiles.active', ext.profile
+
+            bootRun {
+                args = ["--spring.profiles.active=${profile}"]
+            }
+        }
+    }
+
+}
+
+task runManagement {
+    doFirst {
+        println 'run management start'
+    }
+    doLast {
+        println 'run management complete'
+    }
+}
+
+runManagement.dependsOn(':ui:run_dev')
+runManagement.dependsOn(':server:bootRepackage')
+

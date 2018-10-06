@@ -1,0 +1,7 @@
+project(':cache:cache-ehcache') {
+    dependencies {
+        compile(project(":cache:cache-core"))
+        compile("net.sf.ehcache:ehcache:$ehcache_version")
+    }
+
+}
