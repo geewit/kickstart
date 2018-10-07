@@ -280,7 +280,7 @@ subprojects {
             sourceCompatibility = JavaVersion.VERSION_1_8
             targetCompatibility = JavaVersion.VERSION_1_8
             if (profile == 'development') {
-                exclude('io/geewit/**/ehcache/**/*.java')
+                exclude('io/geewit/**/redis/**/*.java')
                 exclude('io/geewit/**/session/**/*.java')
                 exclude('**/*Redis*.java')
                 exclude('**/*Session*.java')
