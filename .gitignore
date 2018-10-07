@@ -17,6 +17,11 @@
 /domain/target
 /domain/out
 /domain/.gradle
+/cache/cache-core/*.iml
+/cache/cache-core/logs
+/cache/cache-core/out
+/cache/cache-core/target
+/cache/cache-core/.gradle
 /cache/cache-ehcache/*.iml
 /cache/cache-ehcache/logs
 /cache/cache-ehcache/out
