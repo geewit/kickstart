@@ -285,7 +285,7 @@ subprojects {
                 exclude('**/*Redis*.java')
                 exclude('**/*Session*.java')
             } else {
-                println "skip profile ehcache/session java source......"
+                println "skip profile redis/session java source......"
 
             }
         }
