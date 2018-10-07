@@ -1,17 +1,14 @@
 package io.geewit.cache.ehcache.configuration;
 
+import net.sf.ehcache.CacheManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.cache.CacheManager;
-import org.springframework.cache.annotation.CachingConfigurerSupport;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.cache.annotation.EnableCaching;
-import org.springframework.cache.ehcache.EhCacheCacheManager;
-import org.springframework.cache.ehcache.EhCacheManagerFactoryBean;
+import org.springframework.cache.ehcache.EhCacheManagerUtils;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.io.ClassPathResource;
-
-import java.util.Objects;
 
 
 /**
@@ -20,18 +17,13 @@ import java.util.Objects;
  */
 @EnableCaching
 @Configuration
-public class CacheEhcacheConfig extends CachingConfigurerSupport {
+public class CacheEhcacheConfig {
     private final static Logger logger = LoggerFactory.getLogger(CacheEhcacheConfig.class);
 
     @Bean
-    public CacheManager cacheManager() {
-        return new EhCacheCacheManager(ehCacheCacheManager().getObject());
+    @ConditionalOnMissingBean
+    public CacheManager ehCacheCacheManager() {
+        return EhCacheManagerUtils.buildCacheManager(new ClassPathResource("ehcache.xml"));
     }
 
-    private EhCacheManagerFactoryBean ehCacheCacheManager() {
-        EhCacheManagerFactoryBean cacheManagerFactoryBean = new EhCacheManagerFactoryBean();
-        cacheManagerFactoryBean.setConfigLocation(new ClassPathResource("ehcache.xml"));
-        cacheManagerFactoryBean.setShared(true);
-        return cacheManagerFactoryBean;
-    }
 }
