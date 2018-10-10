@@ -32,10 +32,7 @@ subprojects {
     println "subproject.name = ${it.name}"
 
     ext {
-        profile = "development"
-        if (rootProject.hasProperty("profile")) {
-            profile = rootProject.findProperty("profile")
-        }
+        profile = System.getProperty("profile") ?: "development"
         println "profile = ${profile}"
     }
 
