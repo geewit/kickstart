@@ -1,4 +1,5 @@
-project(':ui') {
+project(':server-management-ui') {
+
   task npm_install(type: Npm) {
     if (profile == "production") {
       doFirst {
@@ -9,23 +10,36 @@ project(':ui') {
           package_lock_json.delete()
         }
       }
-      args = ['install', '--no-optional', '--registry=https://registry.npm.taobao.org']
+      if(profile == 'production') {
+        args = ['install', '--python=/usr/alibaba/install/python-3.5.0/bin/python3', '--no-optional', '--registry=https://registry.npm.taobao.org']
+      } else {
+        args = ['install', '--no-optional', '--registry=https://registry.npm.taobao.org']
+      }
     }
     // npm_install
+
+
   }
+
 
   task run_dev(type: Npm, dependsOn: npm_install) {
     args = ['run', 'dev']
   }
 
   task rebuild_sass(type: Npm, dependsOn: npm_install) {
-    args = ['rebuild', 'node-sass', '--sass-binary-site=https://npm.taobao.org/mirrors/node-sass']
+    if(profile == 'production') {
+      args = ['rebuild', 'node-sass', '--python=/usr/alibaba/install/python-3.5.0/bin/python3', '--sass-binary-site=https://npm.taobao.org/mirrors/node-sass']
+    } else {
+      args = ['rebuild', 'node-sass', '--sass-binary-site=https://npm.taobao.org/mirrors/node-sass']
+    }
+
   }
 
   task build_prod(type: Npm, dependsOn: rebuild_sass) {
     args = ['run', 'build:prod']
   }
   build_prod.mustRunAfter rebuild_sass
+
 
   task build_sit(type: Npm) {
     args = ['run', 'build:sit']
@@ -36,6 +50,7 @@ class Npm extends Exec {
   Npm() {
     workingDir project.projectDir
     inputs.dir project.projectDir
+    // Add task to the standard build group
     group = BasePlugin.BUILD_GROUP
     def os = System.getProperty("os.name")
     println "Operating System : ${os}"

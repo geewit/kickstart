@@ -1,10 +1,10 @@
 import request from '@/utils/request'
 
-const api_prefix = 'api/business/study_abroad'
+const api_prefix = 'api/country'
 
 export function fetchPage(query) {
   return request.http({
-    url: api_prefix + '/page',
+    url: api_prefix,
     method: 'get',
     params: query
   })
