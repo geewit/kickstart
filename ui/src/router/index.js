@@ -7,8 +7,7 @@ Vue.use(Router)
 import Layout from '@/views/layout/Layout'
 
 /* Router Modules */
-import organizationRouter from './modules/organization'
-import projectRouter from './modules/location'
+import locationRouter from './modules/location'
 
 /** note: submenu only apppear when children.length>=1
  *  detail see  https://panjiachen.github.io/vue-element-admin-site/guide/essentials/router-and-nav.html
@@ -114,7 +113,7 @@ export const asyncRouterMap = [
     ]
   },
   /** When your routing table is too long, you can split it into small modules**/
-  projectRouter,
+  locationRouter,
 
   {
     path: '/error',
@@ -140,16 +139,9 @@ export const asyncRouterMap = [
       },
       {
         path: '/error-log',
-        component: Layout,
-        redirect: 'noredirect',
-        children: [
-          {
-            path: 'log',
-            component: () => import('@/views/errorLog/index'),
-            name: 'errorLog',
-            meta: { title: 'errorLog', icon: 'bug' }
-          }
-        ]
+        name: 'error-log',
+        component: () => import('@/views/errorLog/index'),
+        meta: { title: 'errorLog', icon: 'bug' }
       },
       {
         path: '*',

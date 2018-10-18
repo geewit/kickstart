@@ -2,11 +2,11 @@
 
 import Layout from '@/views/layout/Layout'
 
-const projectRouter = {
+const locationRouter = {
   path: '/location',
   component: Layout,
-  redirect: 'noredirect',
   name: 'location',
+  redirect: 'noredirect',
   meta: {
     title: '地区管理',
     icon: 'project'
@@ -24,4 +24,4 @@ const projectRouter = {
   ]
 }
 
-export default projectRouter
+export default locationRouter
