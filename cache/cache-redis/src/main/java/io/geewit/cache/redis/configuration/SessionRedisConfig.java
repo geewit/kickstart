@@ -7,6 +7,6 @@ import org.springframework.session.data.redis.config.annotation.web.http.EnableR
  * @author geewit
  */
 @Configuration
-@EnableRedisHttpSession(redisNamespace = "rams.${app.name}.${spring.profiles.active}")
+@EnableRedisHttpSession(redisNamespace = "geewit.${app.name}.${spring.profiles.active}")
 public class SessionRedisConfig {
 }
