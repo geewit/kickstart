@@ -145,7 +145,7 @@ subprojects {
                         details.useVersion findbugs_version
                     } else if (details.requested.group == 'com.google.code.gson') {
                         details.useVersion gson_version
-                    } else if (details.requested.group == 'com.google.guava') {
+                    } else if (details.requested.group == 'com.google.guava' && details.requested.name == 'guava') {
                         details.useVersion guava_version
                     } else if (details.requested.group == 'org.hibernate') {
                         details.useVersion hibernate_version
